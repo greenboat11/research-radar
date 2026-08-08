@@ -1,0 +1,53 @@
+# Research Radar — Configuration
+# Edit this file to control cost, cadence, and coverage.
+# All model names: https://docs.anthropic.com/en/docs/about-claude/models
+
+cadence:
+  # How often to run the collector (fetches new items, deduplicates)
+  collection: daily
+  # How often to run the full analysis pipeline (agents + digest)
+  analysis: weekly
+  # If >= this many high-confidence new candidates accumulate, trigger early analysis
+  early_trigger_threshold: 30
+
+lanes:
+  # Disable lanes to reduce cost. Each lane = one specialist agent call.
+  secure_compute: true          # TEEs, HSMs, weight protection, datacenter security
+  cyber_capability: true        # Autonomous offense/defense benchmarks, MTD, deception
+  recursive_improvement: true   # RSI, self-evolving agents, ARA, capability gain
+  multiagent_security: true     # Compositional risk, privilege escalation, trust graphs
+  adversarial_ml: false         # Jailbreaks, prompt injection, robustness evals
+  ai_governance: false          # Safety-eval methodology, red-team frameworks, policy
+
+models:
+  # Triage: cheap model to tag/discard candidates (high volume, low stakes)
+  triage: claude-haiku-4-5-20251001
+  # Specialist agents: mid-tier model for domain analysis
+  specialist: claude-sonnet-4-6
+  # Analyst/synthesizer: most capable model — cross-links, intersections, final digest
+  # Opus recommended; set to sonnet to reduce cost (~4x cheaper)
+  analyst: claude-opus-4-6
+  # Max tokens per agent call
+  specialist_max_tokens: 4096
+  analyst_max_tokens: 8192
+
+state:
+  # Prune seen_urls.json entries older than this many days
+  seen_url_ttl_days: 90
+
+email:
+  # Set to true and configure secrets to enable email delivery
+  enabled: false
+  # Provider: "resend" (recommended) or "smtp"
+  provider: resend
+  # Subject prefix
+  subject_prefix: "Research Radar"
+
+cost_estimate:
+  # Rough per-run estimate with default lanes (4 enabled) and above models.
+  # Collection and triage: ~$0.01-0.03 (Haiku)
+  # 4 specialist agents: ~$0.05-0.15 (Sonnet)
+  # 1 analyst: ~$0.10-0.30 (Opus)
+  # Total weekly analysis: ~$0.15-0.50
+  # Tune by disabling lanes or switching analyst to Sonnet.
+  note: "See above for breakdown. Weekly cadence keeps costs low."

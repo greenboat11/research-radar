@@ -1,0 +1,20 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Logs
+*.log
+logs/
+
+# Local candidate pools (large, transient)
+state/candidates/*.jsonl
+
+# OS
+.DS_Store
+Thumbs.db

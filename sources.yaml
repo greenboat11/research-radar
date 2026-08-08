@@ -1,0 +1,174 @@
+# Research Radar — Source Configuration
+# All feeds, queries, and API settings live here.
+# Edit this file to tune coverage without touching code.
+
+# ---------------------------------------------------------------------------
+# arXiv API (no key required)
+# Docs: https://arxiv.org/help/api/
+# ---------------------------------------------------------------------------
+arxiv:
+  enabled: true
+  base_url: "http://export.arxiv.org/api/query"
+  max_results_per_query: 40
+  # Category filters applied to all queries
+  categories: [cs.CR, cs.AI, cs.LG, cs.MA, cs.NE]
+  # Per-lane keyword queries. Each string becomes one API call.
+  queries:
+    secure_compute:
+      - "confidential computing AI model security"
+      - "trusted execution environment machine learning weights"
+      - "hardware security module key management AI"
+      - "model weight exfiltration threat datacenter"
+      - "supply chain integrity AI hardware attestation"
+    cyber_capability:
+      - "autonomous vulnerability discovery benchmark evaluation"
+      - "LLM offensive capability measurement CTF"
+      - "moving target defense reinforcement learning"
+      - "AI honeypot deception trap adversarial"
+      - "automated exploit generation capability ceiling"
+    recursive_improvement:
+      - "recursive self-improvement AI safety evaluation"
+      - "autonomous replication adaptation containment"
+      - "self-evolving agent capability gain measurement"
+      - "automated machine learning research loop"
+      - "AI self-replication tripwire detection"
+    multiagent_security:
+      - "multi-agent system compositional security risk"
+      - "privilege escalation agent orchestration attack"
+      - "emergent collusion multi-agent AI"
+      - "trust graph agent authentication federation"
+    adversarial_ml:
+      - "jailbreak defense co-evolution evaluation"
+      - "prompt injection agent tool chain robustness"
+      - "adversarial robustness large language model"
+    ai_governance:
+      - "AI safety evaluation red team methodology"
+      - "third party AI audit framework disclosure"
+      - "frontier AI capability evaluation standards"
+
+# ---------------------------------------------------------------------------
+# RSS / Atom feeds for lab blogs and researcher Substacks
+# Add any feed URL here; it will be polled on each collection run.
+# ---------------------------------------------------------------------------
+feeds:
+  enabled: true
+  items:
+    # Lab blogs
+    - name: "Anthropic Blog"
+      url: "https://www.anthropic.com/news/rss"
+      lanes: [secure_compute, cyber_capability, recursive_improvement, ai_governance]
+    - name: "DeepMind Blog"
+      url: "https://deepmind.google/blog/rss"
+      lanes: [recursive_improvement, ai_governance]
+    - name: "OpenAI Blog"
+      url: "https://openai.com/blog/rss.xml"
+      lanes: [recursive_improvement, cyber_capability, ai_governance]
+    - name: "METR (ARC Evals)"
+      url: "https://metr.org/blog/rss.xml"
+      lanes: [recursive_improvement, cyber_capability]
+    - name: "Apollo Research"
+      url: "https://www.apolloresearch.ai/blog/rss"
+      lanes: [recursive_improvement, cyber_capability]
+    - name: "Redwood Research"
+      url: "https://www.redwoodresearch.org/blog/rss"
+      lanes: [recursive_improvement, ai_governance]
+    - name: "RAND AI Security"
+      url: "https://www.rand.org/topics/artificial-intelligence.xml"
+      lanes: [secure_compute, ai_governance]
+    - name: "UK AISI"
+      url: "https://www.aisi.gov.uk/work/rss"
+      lanes: [ai_governance, cyber_capability]
+    - name: "CISA"
+      url: "https://www.cisa.gov/news.xml"
+      lanes: [cyber_capability, secure_compute]
+    # Researcher blogs / Substacks
+    - name: "Import AI (Jack Clark)"
+      url: "https://importai.substack.com/feed"
+      lanes: [recursive_improvement, cyber_capability, ai_governance]
+    - name: "Alignment Forum"
+      url: "https://www.alignmentforum.org/feed.xml"
+      lanes: [recursive_improvement, ai_governance]
+    - name: "Schneier on Security"
+      url: "https://www.schneier.com/feed/atom/"
+      lanes: [cyber_capability, secure_compute]
+    - name: "Simon Willison"
+      url: "https://simonwillison.net/atom/everything/"
+      lanes: [multiagent_security, adversarial_ml]
+
+# ---------------------------------------------------------------------------
+# Hacker News via Algolia API (no key required)
+# Docs: https://hn.algolia.com/api
+# ---------------------------------------------------------------------------
+hackernews:
+  enabled: true
+  base_url: "https://hn.algolia.com/api/v1/search"
+  min_points: 10
+  keywords:
+    - "AI security"
+    - "LLM vulnerability"
+    - "autonomous AI attack"
+    - "model weights security"
+    - "confidential computing AI"
+    - "AI capability evaluation"
+    - "recursive self-improvement"
+    - "multi-agent security"
+    - "prompt injection"
+    - "AI red team"
+
+# ---------------------------------------------------------------------------
+# LessWrong / AI Alignment Forum (GraphQL, no key required)
+# Docs: https://www.lesswrong.com/graphiql
+# ---------------------------------------------------------------------------
+lesswrong:
+  enabled: true
+  graphql_url: "https://www.lesswrong.com/graphql"
+  min_karma: 25
+  tags:
+    - "AI Safety"
+    - "Alignment"
+    - "AI Capabilities"
+    - "Cybersecurity"
+    - "Recursive Self-Improvement"
+
+# ---------------------------------------------------------------------------
+# Reddit (JSON API, no key required — rate-limited, be polite)
+# ---------------------------------------------------------------------------
+reddit:
+  enabled: true
+  user_agent: "research-radar/1.0 (github.com/yourusername/research-radar)"
+  min_score: 10
+  subreddits:
+    - r/MachineLearning
+    - r/netsec
+    - r/artificial
+    - r/AIAlignment
+
+# ---------------------------------------------------------------------------
+# OpenAlex (no key required for low volume)
+# Docs: https://docs.openalex.org/
+# Citation-graph expansion: given seed paper IDs, fetch citing papers.
+# ---------------------------------------------------------------------------
+openalex:
+  enabled: true
+  base_url: "https://api.openalex.org/works"
+  max_results: 30
+  # Seed papers by OpenAlex Work ID or DOI — citing papers are fetched each run.
+  # Find IDs at https://openalex.org/
+  seed_papers:
+    - "https://doi.org/10.48550/arXiv.2312.11805"  # METR autonomy evals
+    - "https://doi.org/10.48550/arXiv.2406.04313"  # Cybench
+    - "https://doi.org/10.48550/arXiv.2401.05566"  # Sleeper agents
+
+# ---------------------------------------------------------------------------
+# X / Twitter — NO FREE RELIABLE API. Do not build a scraper.
+# Leave this stub for users who have a paid API tier or third-party aggregator.
+# The signal from X is largely replicated by the RSS feeds above.
+# ---------------------------------------------------------------------------
+twitter_x:
+  enabled: false
+  note: >
+    X has no free reliable API and scraping violates ToS.
+    If you have a paid API key (Basic or Pro), set it here.
+    Otherwise, researcher blogs and RSS feeds carry most of the same signal.
+  api_key: ""  # bearer token for X API v2
+  search_queries: []
