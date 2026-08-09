@@ -376,9 +376,11 @@ def main():
     raw_file = None
     triaged_file = None
 
+    sys.path.insert(0, str(ROOT))
+
     if not args.analyze_only:
         log.info("=== Phase 1: Collection ===")
-        sys.path.insert(0, str(ROOT))
+
         from collector import collect, triage
         raw_file = collect.run(since_days=args.since_days)
 
@@ -409,7 +411,7 @@ def main():
     dated_digests = sorted(d for d in DIGESTS_DIR.glob("*.md") if d.stem != "latest")
     if dated_digests:
         try:
-            last_analysis = datetime.strptime(dated_digests[-1].stem, "%Y-%m-%d")
+            last_analysis = datetime.strptime(dated_digests[-1].stem, "%Y-%m-%d").replace(tzinfo=timezone.utc)
         except ValueError:
             last_analysis = datetime.now(timezone.utc) - timedelta(days=7)
     else:
@@ -419,7 +421,7 @@ def main():
     for f in sorted(CANDIDATES_DIR.glob("*-triaged.jsonl")):
         date_str = f.stem.replace("-triaged", "")
         try:
-            fdate = datetime.strptime(date_str, "%Y-%m-%d")
+            fdate = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
             if fdate >= last_analysis:
                 with open(f) as fp:
                     for line in fp:
